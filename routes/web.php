@@ -11,6 +11,8 @@
 |
 */
 
+Route::post('seckill_orders', 'OrdersController@seckill')->name('seckill_orders.store')->middleware('random_drop:80');
+
 Route::redirect('/', '/products')->name('root');
 Route::get('products', 'ProductsController@index')->name('products.index');
 Route::get('products', 'ProductsController@index')->name('products.index');
@@ -41,10 +43,22 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::get('payment/{order}/alipay', 'PaymentController@payByAlipay')->name('payment.alipay');
     Route::get('payment/alipay/return', 'PaymentController@alipayReturn')->name('payment.alipay.return');
     Route::get('payment/{order}/wechat', 'PaymentController@payByWechat')->name('payment.wechat');
+    Route::post('payment/{order}/installment', 'PaymentController@payByInstallment')->name('payment.installment');
 
     Route::get('coupon_codes/{code}', 'CouponCodesController@show')->name('coupon_codes.show');
+
+    Route::post('crowdfunding_orders', 'OrdersController@crowdfunding')->name('crowdfunding_orders.store');
+
+    Route::get('installments', 'InstallmentsController@index')->name('installments.index');
+    Route::get('installments/{installment}', 'InstallmentsController@show')->name('installments.show');
+    Route::get('installments/{installment}/alipay', 'InstallmentsController@payByAlipay')->name('installments.alipay');
+    Route::get('installments/alipay/return', 'InstallmentsController@alipayReturn')->name('installments.alipay.return');
+    Route::get('installments/{installment}/wechat', 'InstallmentsController@payByWechat')->name('installments.wechat');
 });
 Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');
 Route::post('payment/wechat/notify', 'PaymentController@wechatNotify')->name('payment.wechat.notify');
 Route::post('payment/wechat/refund_notify', 'PaymentController@wechatRefundNotify')->name('payment.wechat.refund_notify');
+Route::post('installments/alipay/notify', 'InstallmentsController@alipayNotify')->name('installments.alipay.notify');
+Route::post('installments/wechat/notify', 'InstallmentsController@wechatNotify')->name('installments.wechat.notify');
+Route::post('installments/wechat/refund_notify', 'InstallmentsController@wechatRefundNotify')->name('installments.wechat.refund_notify');
